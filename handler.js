@@ -6,15 +6,13 @@ module.exports.getOrderStatus = async (event) => {
   const url = `https://hiringcoders15.vtexcommercestable.com.br/api/oms/pvt/orders/${orderID}`;
 
 
-  //This API information should be put somewhere safe
-  //And probably hit the Auth API to get proper tokens
   const options = {
     headers: {
       accept: 'application/json',
       'content-type': 'application/json',
-      'x-vtex-api-appkey': 'vtexappkey-hiringcoders15-RCHJLW',
-      'x-vtex-api-apptoken': 'SOVMIRVBGNODAILKBAOGZBFXPUBFIKSCIEQZGVDBWEIIGVUITSKZHOGRJXWOQQSVVMVWRLEFXNKVSXRUZTMQZSUUYZQIZOLGLMNUAYRHOFBTDKYMGBOXDCVCRAYRVVGI',
-      vtexidclientautcookie: 'eyJhbGciOiJFUzI1NiIsImtpZCI6IjBEN0REN0UzMUMzRTI4MkEwNEI0M0VGNUY5MDQ5ODZCMUY3RUM3RjYiLCJ0eXAiOiJqd3QifQ'
+      'x-vtex-api-appkey': `${process.env.vtexAppKey}`,
+      'x-vtex-api-apptoken': `${process.env.vtexApiToken}`,
+      vtexidclientautcookie: `${process.env.vtexIdClient}`
     }
   };
 
@@ -35,5 +33,16 @@ module.exports.getOrderStatus = async (event) => {
     }
   } catch (error) {
     console.log(error);
+    return {
+      "sessionAttributes": {},
+      "dialogAction": {
+        "type": "Close",
+        "fulfillmentState": "Fulfilled",
+        "message": {
+          "contentType": "PlainText",
+          "content": 'Pedido não encontrado.'
+        }
+      }
+    }
   }
 };
