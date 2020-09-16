@@ -29,7 +29,7 @@ module.exports.getOrderStatus = async (event) => {
         "fulfillmentState": "Fulfilled",
         "message": {
           "contentType": "PlainText",
-          "content": `O status do seu pedido de número ${orderID} é "${data.statusDescription}" e está sendo enviado para o endereço ${data.shippingData.address.addressType} em nome de ${data.shippingData.address.receiverName}`
+          "content": `O status do seu pedido de número ${orderID} é ${data.statusDescription} e está sendo enviado para o endereço ${data.shippingData.address.addressType} em nome de ${data.shippingData.address.addressType.addressType}`
         }
       }
     }

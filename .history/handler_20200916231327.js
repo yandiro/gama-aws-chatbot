@@ -1,11 +1,10 @@
+
 'use strict';
 const axios = require("axios");
 
-module.exports.getOrderStatus = async (event) => {
+module.exports.getWeather = async (event) => {
   const orderID = event.currentIntent.slots["Pedido"];
-  const url = `https://hiringcoders15.vtexcommercestable.com.br/api/oms/pvt/orders/${orderID}`;
-
-
+  
   //This API information should be put somewhere safe
   //And probably hit the Auth API to get proper tokens
   const options = {
@@ -14,13 +13,15 @@ module.exports.getOrderStatus = async (event) => {
       'content-type': 'application/json',
       'x-vtex-api-appkey': 'vtexappkey-hiringcoders15-RCHJLW',
       'x-vtex-api-apptoken': 'SOVMIRVBGNODAILKBAOGZBFXPUBFIKSCIEQZGVDBWEIIGVUITSKZHOGRJXWOQQSVVMVWRLEFXNKVSXRUZTMQZSUUYZQIZOLGLMNUAYRHOFBTDKYMGBOXDCVCRAYRVVGI',
-      vtexidclientautcookie: 'eyJhbGciOiJFUzI1NiIsImtpZCI6IjBEN0REN0UzMUMzRTI4MkEwNEI0M0VGNUY5MDQ5ODZCMUY3RUM3RjYiLCJ0eXAiOiJqd3QifQ'
+      'vtexidclientautcookie': 'eyJhbGciOiJFUzI1NiIsImtpZCI6IjBEN0REN0UzMUMzRTI4MkEwNEI0M0VGNUY5MDQ5ODZCMUY3RUM3RjYiLCJ0eXAiOiJqd3QifQ'
     }
   };
 
   try {
-    const response = await axios.get(url, options);
+    const response = await axios.get(url);
     const data = response.data;
+
+    const answer = "The temperature is " + data.main.temp + "C and Humidity is " + data.main.humidity + "% and " + data.weather[0].description + " is expected.";
 
     return {
       "sessionAttributes": {},
@@ -29,7 +30,7 @@ module.exports.getOrderStatus = async (event) => {
         "fulfillmentState": "Fulfilled",
         "message": {
           "contentType": "PlainText",
-          "content": `O status do seu pedido de número ${orderID} é "${data.statusDescription}" e está sendo enviado para o endereço ${data.shippingData.address.addressType} em nome de ${data.shippingData.address.receiverName}`
+          "content": answer
         }
       }
     }
